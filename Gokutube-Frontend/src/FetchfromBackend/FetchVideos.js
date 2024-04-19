@@ -1,11 +1,11 @@
-import axios from "axios"
+import axios from "../api/axios.js"
 
 const FetchAllVidoes = async({
     limit=9,
     query=""
 }) => {
     try {
-        const response = await axios.get(`https://gokutube-fullstack-backend.vercel.app/api/v1/videos/get-all-videos?limit=${limit}&query=${query}`);
+        const response = await axios.get(`/api/v1/videos/get-all-videos?limit=${limit}&query=${query}`);
         return response.data.data
     } catch (error) {
         console.log(error);
