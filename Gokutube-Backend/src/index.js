@@ -14,6 +14,8 @@ connectDB()
         throw err
     })
 
+    app.get("/", (req, res) => res.send("Express on Vercel"));
+
     app.listen(conf.port || 8000, () => {
         console.log("Server is running on port: ", conf.port)
     })
