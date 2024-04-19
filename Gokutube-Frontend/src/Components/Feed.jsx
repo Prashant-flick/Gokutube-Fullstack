@@ -32,7 +32,7 @@ function Feed() {
         setvideos(prev => prev=data.data.data.videos);
         setlength(prev => prev=data.data.data.length);
       })()
-    }else{
+    }else if(status){
       ;(async() => {
         const data = await FetchAllVidoes({limit:limit+6, query:(search==null ? "" : search)});
         setvideos(prev => prev=data.videos);
