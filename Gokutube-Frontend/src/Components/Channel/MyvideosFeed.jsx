@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import { Link, useParams } from 'react-router-dom';
-import axios from '../api/axios.js';
+import axios from '../../api/axios.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletedata as deletevideo } from '../../store/videoSlice.js';
 
