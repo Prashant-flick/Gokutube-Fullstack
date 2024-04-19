@@ -3,7 +3,7 @@ import {Logo, SearchBar, UserAvatar} from './index.js'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import axios  from 'axios'
+import axios  from '../api/axios.js'
 import { useNavigate } from 'react-router-dom'
 
 function Header() {

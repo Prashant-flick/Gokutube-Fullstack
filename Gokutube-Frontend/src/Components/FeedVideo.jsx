@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FetchUserPlaylist } from '../FetchfromBackend/index.js';
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 function FeedVideo({
     video=null,

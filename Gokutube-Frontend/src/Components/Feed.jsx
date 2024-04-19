@@ -5,7 +5,7 @@ import { FeedVideo } from './index.js'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { setplaylist } from '../store/playlistSlice.js';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios.js';
 
 function Feed() {
   const [videos, setvideos] = useState([]);

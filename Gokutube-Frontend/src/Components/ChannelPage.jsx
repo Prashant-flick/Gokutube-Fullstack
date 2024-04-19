@@ -5,7 +5,7 @@ import { useNavigate} from 'react-router-dom';
 import { useParams, useLocation } from 'react-router-dom'
 import { getUserChannelProfile } from '../FetchfromBackend/FetchUser.js'
 import { login as authlogin} from '../store/authSlice.js'
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 function ChannelPage() { 
   const {username} = useParams()
