@@ -7,8 +7,7 @@ import bodyParser from 'body-parser'
 const app = express()
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
+    origin: "https://gokutube-fullstack-frontend.vercel.app"
 }))
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
