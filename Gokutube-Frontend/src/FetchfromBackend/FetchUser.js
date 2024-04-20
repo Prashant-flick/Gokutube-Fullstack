@@ -1,4 +1,4 @@
-import axios from "../api/axios.js";
+import axios from "axios";
 
 const FetchCurrentUser = async() => {
     try {

@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': 'https://gokutube-fullstack-backend.vercel.app'
+      '/api': String(process.env.API_URL)
     }
   },
   plugins: [react()],

@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export default axios.create({
-    baseURL: 'https://gokutube-fullstack-backend.vercel.app'
+    baseURL: String(process.env.API_URL)
 })

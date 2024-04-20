@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from '../api/axios.js'
+import axios from 'axios'
 import {login as authLogin} from '../store/authSlice'
 import {
   Input,
