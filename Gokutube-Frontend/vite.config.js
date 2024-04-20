@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-          target: String(process.env.API_URL),
+          target: String(import.meta.env.API_URL),
           changeOrigin: true,
           secure: false,      
       }
