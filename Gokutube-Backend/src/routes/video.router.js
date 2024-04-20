@@ -35,6 +35,6 @@ router.route("/toggle-publish-status/:videoId").post(verifyJWT,togglePublishStat
 router.route("/get-all-subscription-videos").post(verifyJWT,getAllSubscriptionVideos)
 
 //get all-videos special
-router.route("/get-all-videos").get(verifyJWT,getAllVideos)
+router.route("/get-all-videos").get(getAllVideos)
 
 export default router;
