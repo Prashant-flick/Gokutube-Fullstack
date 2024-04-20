@@ -98,7 +98,7 @@ function FeedVideo({
         setShowVideo(false)
       }}
     >
-      <Link to={`/videos/${video._id}`}>
+      <Link to={`/videos/${video?._id}`}>
         <video 
           onMouseLeave={() => {
             setShowVideo(false)
@@ -106,14 +106,14 @@ function FeedVideo({
           autoPlay
           muted
           className={`w-full ${showVideo ? '' : 'hidden'} ${myvideo? 'h-52 ' : 'h-60'} opacity-10 hover:opacity-100 transition-all ease-in-out duration-[3s] rounded-lg mb-2 border border-gray-700 overflow-hidden object-cover object-center`}>
-          <source src={video.videoFile} type='video/mp4'/>
+          <source src={video?.videoFile} type='video/mp4'/>
         </video>
 
         <img
           onMouseEnter={()=>{
             setShowVideo(true)  
           }}
-          src={video.thumbnail} alt="Video Thumbnail"
+          src={video?.thumbnail} alt="Video Thumbnail"
             className={`rounded-lg mb-2 transition-opacity duration-500 ease-in-out ${showVideo ? 'hidden': ''}  ${myvideo? 'h-52' : 'h-60'} w-full overflow-hidden object-cover object-center`}
         />
       </Link>
@@ -122,15 +122,15 @@ function FeedVideo({
           className='ml-3 gap-2 flex flex-row mb-3 items-center relative'
         >
           
-          <Link to={`${status ? `/channel/${null}?id=${video.owner}` : '/login'}`}>
-            <img src={video.owneravatar} alt="User Profile"
+          <Link to={`${status ? `/channel/${null}?id=${video?.owner}` : '/login'}`}>
+            <img src={video?.owneravatar} alt="User Profile"
             className='rounded-full h-10 w-10'
             />
           </Link>
   
           <div className='flex flex-col'>
-          <h1 className='text-white text-xl'>{video.title}</h1>
-          <h2 className='text-gray-500'>{video.views} views - {CalcTimeFromNow()}</h2>
+          <h1 className='text-white text-xl'>{video?.title}</h1>
+          <h2 className='text-gray-500'>{video?.views} views - {CalcTimeFromNow()}</h2>
           </div>
           <button
             onClick={(e) => {
