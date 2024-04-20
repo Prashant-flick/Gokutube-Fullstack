@@ -19,7 +19,7 @@ function SIgnIn() {
     const {emailorusername, password} = e.target;
 
     try {
-      axios.defaults.withCredentials = true;
+      axios.defaults.withCredentials = false;
 
       const data = await axios.post(`${String(import.meta.env.VITE_API_URL)}/api/v1/users/login`, {
           email: emailorusername.value,
