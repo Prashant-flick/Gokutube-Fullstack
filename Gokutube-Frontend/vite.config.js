@@ -9,7 +9,6 @@ export default defineConfig({
           target: String(process.env.API_URL),
           changeOrigin: true,
           secure: false,      
-          ws: true,
       }
     }
   },

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const FetchUserPlaylist = async(id) => {
     try {
-        const playlist = await axios.get(`/api/v1/playlist/get-user-playlists/${id}`)
+        const playlist = await axios.get(`${String(process.env.API_URL)}/api/v1/playlist/get-user-playlists/${id}`)
     
         return playlist.data.data
     } catch (error){

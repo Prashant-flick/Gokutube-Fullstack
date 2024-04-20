@@ -21,7 +21,7 @@ function SIgnIn() {
     try {
       axios.defaults.withCredentials = true;
 
-      const data = await axios.post('/api/v1/users/login', {
+      const data = await axios.post(`${String(process.env.API_URL)}/api/v1/users/login`, {
           email: emailorusername.value,
           username: emailorusername.value,
           password: password.value

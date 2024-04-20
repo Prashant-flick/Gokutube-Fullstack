@@ -5,7 +5,7 @@ const FetchAllVidoes = async({
     query=""
 }) => {
     try {
-        const response = await axios.get(`/api/v1/videos/get-all-videos?limit=${limit}&query=${query}`);
+        const response = await axios.get(`${String(process.env.API_URL)}/api/v1/videos/get-all-videos?limit=${limit}&query=${query}`);
         return response.data.data
     } catch (error) {
         console.log(error);
@@ -15,7 +15,7 @@ const FetchAllVidoes = async({
 
 const fetchUserVideo = async(userId) => {
     try {
-        const response = await axios.get(`/api/v1/videos/get-all-videos?userId=${userId}`)
+        const response = await axios.get(`${String(process.env.API_URL)}/api/v1/videos/get-all-videos?userId=${userId}`)
     
         return response.data.data
     } catch (error) {
@@ -25,7 +25,7 @@ const fetchUserVideo = async(userId) => {
 
 const fetchVideoById = async({id, isplaying=false}) => {
     try {
-        const response = await axios.get(`/api/v1/videos/get-video/${id}?isplaying=${isplaying}`)
+        const response = await axios.get(`${String(process.env.API_URL)}/api/v1/videos/get-video/${id}?isplaying=${isplaying}`)
       
         return response.data.data
     } catch (error) {
