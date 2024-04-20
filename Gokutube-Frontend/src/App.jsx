@@ -12,8 +12,7 @@ function App() {
   const dispatch = useDispatch()
   const [loader , setloader] = useState(true)
   const location = useLocation()
-  const title = location.pathname.split('/')[1]
-  
+  const title = location.pathname.split('/')[1]  
 
   useEffect(() => {
     setTimeout(() => {
