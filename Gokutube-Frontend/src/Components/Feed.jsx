@@ -84,7 +84,7 @@ function Feed() {
       className='bg-gray-950 w-full h-full min-h-[90vh]'
     >
         {
-          videos.length>0 ?
+          videos?.length>0 ?
           <InfiniteScroll
           dataLength={limit}
           next={fetchMoreData}
@@ -98,7 +98,7 @@ function Feed() {
             <div 
               className={`${'grid grid-cols-3 h-full mt-3 mx-2'}`}
             >
-              {videos.map((video, index) => {
+              {videos?.map((video, index) => {
                 return (
                   <div 
                     key={index}

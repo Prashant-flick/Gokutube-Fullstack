@@ -32,10 +32,12 @@ function SideBar() {
       setIsActive('Home')
     }
 
-    ;(async() => {
-      const data = await axios.get(`/api/v1/subscription/get-subscribed-to/${user?._id}?limit=${limit}`)
-      setsubscribed(data.data.data)
-    })()
+    if(authstatus){
+      ;(async() => {
+        const data = await axios.get(`/api/v1/subscription/get-subscribed-to/${user?._id}?limit=${limit}`)
+        setsubscribed(data.data.data)
+      })()
+    }
   },[user])
 
   const changeActive = (e) => {
