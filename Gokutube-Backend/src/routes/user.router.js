@@ -29,10 +29,10 @@ router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 router.route("/get-current-user").get(verifyJWT, getCurrentUser)
 router.route("/delete-current-user").delete(verifyJWT, deleteCurrentUser)
-router.route("/update-account").patch(verifyJWT, updateAccountDetails)
+router.route("/update-account").post(verifyJWT, updateAccountDetails)
 
-router.route("/update-avatar").patch(verifyJWT, updateAvatarDetails)
-router.route("/update-coverImage").patch(verifyJWT, updateCoverImageDetails)
+router.route("/update-avatar").post(verifyJWT, updateAvatarDetails)
+router.route("/update-coverImage").post(verifyJWT, updateCoverImageDetails)
 
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 router.route("/get-user-by-id/:id").get(verifyJWT, getUserbyId)
