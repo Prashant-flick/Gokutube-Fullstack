@@ -11,7 +11,13 @@ app.use(cors({
     credentials: 'include',
     withCredentials: true,
     allowedHeaders: 'Content-Type,Authorization',
-    exposedHeaders: 'Content-Range,X-Content- Range'
+    exposedHeaders: 'Content-Range,X-Content- Range',
+    headers: {
+        'Access-Control-Allow-Origin': 'https://gokutube.vercel.app',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true'
+    }
 }))
 
 app.use((req, res, next) => {
