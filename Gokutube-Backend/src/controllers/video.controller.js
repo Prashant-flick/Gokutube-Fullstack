@@ -286,15 +286,35 @@ const getAVideobyId = asyncHandler( async (req, res) => {
         throw new apiError(404, "video not found")
     }
 
-    if(isplaying=='true' && JSON.stringify(req?.user?.watchHistory[0]) != JSON.stringify(video[0]?._id)){
-        let user = await User.findById(req?.user?._id)
-        let index = user?.watchHistory?.indexOf(video[0]?._id)
-        if(index !== -1){
-            user?.watchHistory?.splice(index, 1, video[0]?._id)
-        }else{
-            user?.watchHistory?.unshift(video[0]?._id)
-        }
-        await user.save({validateBeforeSave: false});
+    if(isplaying=='true'){
+        const user = await User.aggregate([
+            {
+              $match: { _id: new mongoose.Types.ObjectId(req?.user?._id) }
+            },
+            {
+              $project: {
+                watchHistory: {
+                  $cond: {
+                    if: {
+                        $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, new mongoose.Types.ObjectId(video[0]?._id)]
+                    },
+                    then: {
+                      $concatArrays: [
+                        [video[0]?._id],
+                        { $filter: { input: "$watchHistory", cond: { $ne: ["$$this", new mongoose.Types.ObjectId(video[0]?._id)] } } }
+                      ]
+                    },
+                    else: "$watchHistory"
+                  }
+                }
+              }
+            },
+            {
+              $set: { watchHistory: "$watchHistory" }
+            }
+          ]
+        )
+        console.log(user);
     }
 
     return res.status(200)
