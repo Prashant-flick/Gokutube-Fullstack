@@ -31,9 +31,8 @@ router.route("/get-current-user").get(verifyJWT, getCurrentUser)
 router.route("/delete-current-user").delete(verifyJWT, deleteCurrentUser)
 router.route("/update-account").post(verifyJWT, updateAccountDetails)
 
-router.route("/update-avatar").post(verifyJWT, updateAvatarDetails)
-router.route("/update-coverImage").post(verifyJWT, updateCoverImageDetails)
-
+router.route("/update-avatar").post(verifyJWT,upload.single("avatar"), updateAvatarDetails)
+router.route("/update-coverImage").post(verifyJWT, upload.single("coverImage"), updateCoverImageDetails)
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 router.route("/get-user-by-id/:id").get(verifyJWT, getUserbyId)
 router.route("/history").get(verifyJWT, getwatchHistory)
