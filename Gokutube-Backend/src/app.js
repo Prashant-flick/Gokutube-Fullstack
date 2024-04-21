@@ -7,17 +7,11 @@ import bodyParser from 'body-parser'
 const app = express()
 
 app.use(cors({
-    origin: ['https://main--gokutube-frontend.netlify.app','https://gokutube-frontend.vercel.app','https://gokutube.vercel.app',conf.corsOrigin],
-    credentials: 'include',
+    origin: ['https://gokutube-frontend.vercel.app','https://gokutube.vercel.app',conf.corsOrigin],
+    credentials: true,
     withCredentials: true,
-    allowedHeaders: 'Content-Type,Authorization',
-    exposedHeaders: 'Content-Range,X-Content- Range',
-    headers: {
-        'Access-Control-Allow-Origin': 'https://gokutube.vercel.app',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true'
-    }
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range']
 }))
 
 app.use((req, res, next) => {
