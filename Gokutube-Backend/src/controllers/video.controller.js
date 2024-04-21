@@ -286,11 +286,11 @@ const getAVideobyId = asyncHandler( async (req, res) => {
         throw new apiError(404, "video not found")
     }
 
-    if(isplaying=='true' && JSON.stringify(req?.user?.watchHistory[0]) !== JSON.stringify(video[0]?._id)){
-        const data = await User.findById(req?.user?._id)
-        data.watchHistory = data.watchHistory.filter((id) => JSON.stringify(id)!==JSON.stringify(video[0]?._id))
-        data.watchHistory = [video[0]?._id, ...data.watchHistory]
-        await data.save({validateBeforeSave: false});
+    if(isplaying=='true' && JSON.stringify(req?.user?.watchHistory[0]) != JSON.stringify(video[0]?._id)){
+        const users = await User.findById(req?.user?._id)
+        users.watchHistory = users.watchHistory.filter((id) => JSON.stringify(id)!==JSON.stringify(video[0]?._id))
+        users.watchHistory = [video[0]?._id, ...users.watchHistory]
+        const data = await users.save({validateBeforeSave: false});
         console.log(data);
     }
 
