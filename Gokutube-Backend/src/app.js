@@ -8,8 +8,10 @@ const app = express()
 
 app.use(cors({
     origin: ['https://main--gokutube-frontend.netlify.app','https://gokutube-frontend.vercel.app','https://gokutube.vercel.app',conf.corsOrigin],
-    credentials: true,
-    withCredentials: true
+    credentials: 'include',
+    withCredentials: true,
+    allowedHeaders: 'Content-Type,Authorization',
+    exposedHeaders: 'Content-Range,X-Content- Range'
 }))
 
 app.use((req, res, next) => {
@@ -23,11 +25,12 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 
-app.use(express.json({limit: '10mb'}))
-app.use(express.urlencoded({extended: true, limit: '20mb'}))
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({extended: true, limit: '50mb'}))
 app.use(express.static('public'))
 app.use(cookieParser())
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //router import 
