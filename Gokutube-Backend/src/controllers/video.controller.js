@@ -287,11 +287,14 @@ const getAVideobyId = asyncHandler( async (req, res) => {
     }
 
     if(isplaying=='true' && JSON.stringify(req?.user?.watchHistory[0]) != JSON.stringify(video[0]?._id)){
-        const user = await User.findById(req?.user?._id)
-        user.watchHistory = user.watchHistory.filter((id) => JSON.stringify(id)!==JSON.stringify(video[0]?._id))
-        user.watchHistory?.unshift(video[0]?._id)
-        const data = await user.save({validateBeforeSave: false});
-        console.log(data);
+        let user = await User.findById(req?.user?._id)
+        let index = user?.watchHistory?.indexOf(video[0]?._id)
+        if(index !== -1){
+            user?.watchHistory?.splice(index, 1, video[0]?._id)
+        }else{
+            user?.watchHistory?.unshift(video[0]?._id)
+        }
+        await user.save({validateBeforeSave: false});
     }
 
     return res.status(200)
