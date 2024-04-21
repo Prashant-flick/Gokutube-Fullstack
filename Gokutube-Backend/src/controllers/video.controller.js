@@ -304,7 +304,12 @@ const getAVideobyId = asyncHandler( async (req, res) => {
                         { $filter: { input: "$watchHistory", cond: { $ne: ["$$this", new mongoose.Types.ObjectId(video[0]?._id)] } } }
                       ]
                     },
-                    else: "$watchHistory"
+                    else:{
+                      $concatArrays: [
+                        [video[0]._id],
+                        "$watchHistory"
+                      ]
+                    }
                   }
                 }
               }
