@@ -48,7 +48,7 @@ const registerUser = asyncHandler(async (req, res) => {
         email,
         username: username.toLowerCase(),
         password,
-        avatar: 'https://res.cloudinary.com/dbmlz6pip/image/upload/v1713336824/yvcn1vbdpxg5ftjxfveb.jpg',
+        avatar: 'https://res.cloudinary.com/dbmlz6pip/image/upload/v1713687287/u7cjyrdwu13cpnezw5ht.jpg',
         coverImage: "",
     })
 
@@ -316,11 +316,12 @@ const updateAvatarDetails = asyncHandler( async(req, res) => {
 
     // getting cloudinary avatar file name
     let oldavatar = req.user?.avatar;
-    oldavatar = oldavatar.split('/');
-    oldavatar = oldavatar[7];
-    oldavatar = oldavatar.split('.')[0]
-
-    deleteFromCloudinary(oldavatar);
+    if(String(oldavatar) != "https://res.cloudinary.com/dbmlz6pip/image/upload/v1713687287/u7cjyrdwu13cpnezw5ht.jpg" && oldavatar){
+        oldavatar = oldavatar.split('/');
+        oldavatar = oldavatar[7];
+        oldavatar = oldavatar.split('.')[0]
+        deleteFromCloudinary(oldavatar);
+    }
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
