@@ -316,7 +316,7 @@ const updateAvatarDetails = asyncHandler( async(req, res) => {
 
     // getting cloudinary avatar file name
     let oldavatar = req.user?.avatar;
-    if(String(oldavatar) != "https://res.cloudinary.com/dbmlz6pip/image/upload/v1713687287/u7cjyrdwu13cpnezw5ht.jpg" && oldavatar){
+    if(oldavatar && (String(oldavatar) != "https://res.cloudinary.com/dbmlz6pip/image/upload/v1713687287/u7cjyrdwu13cpnezw5ht.jpg")){
         oldavatar = oldavatar.split('/');
         oldavatar = oldavatar[7];
         oldavatar = oldavatar.split('.')[0]
