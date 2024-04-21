@@ -9,9 +9,9 @@ const app = express()
 app.use(cors({
     origin: ['https://gokutube-frontend.vercel.app','https://gokutube.vercel.app',conf.corsOrigin],
     credentials: true,
-    // withCredentials: true,
-    // allowedHeaders: ['Content-Type', 'Authorization'],
-    // exposedHeaders: ['Content-Range', 'X-Content-Range']
+    withCredentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range']
 }))
 
 // app.use((req, res, next) => {
