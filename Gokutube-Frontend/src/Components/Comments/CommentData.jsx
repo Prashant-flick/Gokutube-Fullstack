@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 import {deleteComment as deleteCommentAction, updateComment as updateCommentAction} from '../../store/commentSlice.js'
 
 function CommentData({

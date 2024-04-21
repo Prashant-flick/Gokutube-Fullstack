@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {Link, useParams} from 'react-router-dom'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 import { useSelector } from 'react-redux'
 
 function PlaylistVideo({

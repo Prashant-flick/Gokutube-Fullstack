@@ -4,7 +4,7 @@ import { fetchVideoById, getUserChannelProfile } from '../../FetchfromBackend/in
 import { useParams } from 'react-router-dom'
 import { Button, GetVideoComments, VideoPageFeedVideo, CustomVideoPlayer } from '../index.js'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 
 function VideoPage() {
   const [subscribed, setSubscribed] = useState(false)

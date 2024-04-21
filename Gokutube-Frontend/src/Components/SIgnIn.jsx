@@ -3,7 +3,7 @@ import {
     Input,
     Button,
 } from './index.js'
-import axios from 'axios'
+import axios from '../api/axios.js'
 import { useDispatch } from 'react-redux'
 import { login as authLogin } from '../store/authSlice'
 import { useNavigate } from 'react-router-dom'

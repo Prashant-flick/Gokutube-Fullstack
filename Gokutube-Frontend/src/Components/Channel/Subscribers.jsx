@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 import { SubscribedChannelDetails } from '../index.js'
 
 function Subscribers() {

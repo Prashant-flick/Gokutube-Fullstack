@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Input, Button, MyvideosFeed } from '../index.js'
 import { setdata as setvideodata, adddata as addvideodata} from '../../store/videoSlice.js'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 
 function MyVideos() {
   const videodata = useSelector(state => state.videoReducer.videoData)

@@ -5,7 +5,7 @@ import { useNavigate} from 'react-router-dom';
 import { useParams, useLocation } from 'react-router-dom'
 import { getUserChannelProfile } from '../FetchfromBackend/FetchUser.js'
 import { login as authlogin} from '../store/authSlice.js'
-import axios from 'axios'
+import axios from '../api/axios.js'
 
 function ChannelPage() { 
   const {username} = useParams()
@@ -56,7 +56,11 @@ function ChannelPage() {
     if(avatar.value){
       const formData = new FormData();
       formData.append('avatar', avatar.files[0])
-      const data = await axios.patch(`/api/v1/users/update-avatar`, formData)
+      const data = await axios.patch(`/api/v1/users/update-avatar`, formData,
+        {
+          headers: {'Content-Type': 'multipart/form-data'}
+        }
+      )
       console.log(data);
       if(data.status !== 200){
         flag1=false;
@@ -68,7 +72,11 @@ function ChannelPage() {
     if(coverImage?.value){
       const formData = new FormData();
       formData.append('coverImage', coverImage.files[0])
-      const data = await axios.patch(`/api/v1/users/update-coverImage`, formData)
+      const data = await axios.patch(`/api/v1/users/update-coverImage`, formData,
+      {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }
+    )
       console.log(data);
       if(data.status !== 200){
         flag2=false;
@@ -145,7 +153,7 @@ function ChannelPage() {
                       className='flex flex-row items-center gap-5 px-5 py-2 bg-gray-700 h-72 rounded-xl w-[30rem]'
                     >
                       <img src={user?.avatar} className='rounded-full h-36 w-36 object-cover object-center' />
-                        <form 
+                        <form
                           onSubmit={(e) => {
                             e.preventDefault()
                             customizeChannel(e)

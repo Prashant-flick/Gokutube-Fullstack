@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { fetchVideoById, fetchUserById } from '../../FetchfromBackend/index.js'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 import { FetchUserPlaylist } from '../../FetchfromBackend/index.js'
 import { useSelector, useDispatch } from 'react-redux'
 import { setplaylist } from '../../store/playlistSlice.js'

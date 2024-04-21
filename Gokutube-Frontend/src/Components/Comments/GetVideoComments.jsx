@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import { FetchComment } from '../../FetchfromBackend/index.js'
 import { CommentContent, UserAvatar, Button } from '../index.js'
-import axios from 'axios'
+import axios from '../../api/axios.js'
 import { addComment as addcommentslice } from '../../store/commentSlice.js'
 import { useDispatch , useSelector} from 'react-redux'
 

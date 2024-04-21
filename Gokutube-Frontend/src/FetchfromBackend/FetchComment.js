@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../api/axios.js"
 
 const FetchComment = async ({videoId,limit=10}) => {
     try {
