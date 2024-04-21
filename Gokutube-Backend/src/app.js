@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 const app = express()
 
 app.use(cors({
-    origin: ['https://main--gokutube-frontend.netlify.app','https://gokutube-frontend.vercel.app',conf.corsOrigin],
+    origin: ['https://main--gokutube-frontend.netlify.app','https://gokutube-frontend.vercel.app','https://gokutube.vercel.app',conf.corsOrigin],
     credentials: true,
     withCredentials: true
 }))
