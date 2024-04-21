@@ -92,6 +92,7 @@ const getAllSubscriptionVideos = asyncHandler(async (req, res) => {
 
 const publishAVideo = asyncHandler(async (req, res) => {
     const {title , description} = req.body;
+    console.log(title, description);
 
     if(!title || !description){
         throw new apiError(404, "title and description are required")
@@ -99,6 +100,10 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
     const videoFileLocalPath = req.files?.videoFile[0]?.path;
     const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
+    console.log(req.files);
+    console.log(req.files.videoFile);
+    console.log(req.files.thumbnail);
+    console.log(req?.file);
 
     if(!videoFileLocalPath || !thumbnailLocalPath){
         throw new apiError(404, "video and thumbnail are required")
