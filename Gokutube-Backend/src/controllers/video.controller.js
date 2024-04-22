@@ -287,33 +287,38 @@ const getAVideobyId = asyncHandler( async (req, res) => {
     }
 
     if(isplaying || isplaying=='true'){
-        console.log('isplaying', isplaying);
-        const user = await User.aggregate([
-            {
-              $match: { _id: new mongoose.Types.ObjectId(req?.user?._id) }
-            },
-            {
-              $set: { 
-                watchHistory: {
-                  $cond: {
-                    if: {
-                        $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, new mongoose.Types.ObjectId(video[0]?._id)]
-                    },
-                    then: {
-                      $concatArrays: [
-                        [video[0]?._id],
-                        { $filter: { input: "$watchHistory", cond: { $ne: ["$$this", new mongoose.Types.ObjectId(video[0]?._id)] } } }
-                      ]
-                    },
-                    else: "$watchHistory"
-                  }
+      console.log('isplaying', isplaying);
+      const user = await User.updateOne(
+        { _id: new mongoose.Types.ObjectId(req?.user?._id) },
+        {
+          $addToSet: {
+            watchHistory: {
+              $cond: {
+                if: {
+                  $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, new mongoose.Types.ObjectId(video[0]?._id)]
+                },
+                then: {
+                  $concatArrays : [
+                    [video[0]?._id],
+                    {
+                      $filter: {
+                        input: "$watchHistory",
+                        as: "item",
+                        cond: {
+                          $ne: ["$$item", new mongoose.Types.ObjectId(video[0]?._id)]
+                        }
+                      }
+                    }
+                  ]
+                },
+                else: "$watchHistory"
                 }
-              }
             }
-          ]
-        )
-        console.log('here watchhistory');
-        console.log(user);
+          }
+        }
+      );
+      console.log('here watchhistory');
+      console.log(user);
     }
 
     return res.status(200)
