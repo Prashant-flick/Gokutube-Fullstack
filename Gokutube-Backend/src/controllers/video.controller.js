@@ -291,27 +291,12 @@ const getAVideobyId = asyncHandler( async (req, res) => {
       const user = await User.updateOne(
         { _id: new mongoose.Types.ObjectId(req?.user?._id) },
         {
-          $addToSet: {
-            watchHistory: {
-              $cond: {
-                if: {
-                  $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, video[0]?._id]
-                },
-                then: {
-                  $concatArrays : [
-                    [video[0]?._id],
-                    {
-                      $filter: {
-                        input: "$watchHistory",
-                        cond: {
-                          $ne: ["$$this", video[0]?._id]
-                        }
-                      }
-                    }
-                  ]
-                },
-                else: "$watchHistory"
-                }
+          $set: {
+            watchHistory : {
+              $concatArrays: [
+                [video[0]?._id],
+                "$watchHistory"
+              ]
             }
           }
         }
