@@ -293,8 +293,8 @@ const getAVideobyId = asyncHandler( async (req, res) => {
               $match: { _id: new mongoose.Types.ObjectId(req?.user?._id) }
             },
             {
-              $project: {
-                watchHistory1: {
+              $set: { 
+                watchHistory: {
                   $cond: {
                     if: {
                         $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, new mongoose.Types.ObjectId(video[0]?._id)]
@@ -314,9 +314,6 @@ const getAVideobyId = asyncHandler( async (req, res) => {
                   }
                 }
               }
-            },
-            {
-              $set: { watchHistory: "$watchHistory1" }
             }
           ]
         )
