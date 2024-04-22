@@ -286,14 +286,15 @@ const getAVideobyId = asyncHandler( async (req, res) => {
         throw new apiError(404, "video not found")
     }
 
-    if(isplaying=='true'){
+    if(isplaying || isplaying=='true'){
+        console.log('isplaying', isplaying);
         const user = await User.aggregate([
             {
               $match: { _id: new mongoose.Types.ObjectId(req?.user?._id) }
             },
             {
               $project: {
-                watchHistory: {
+                watchHistory1: {
                   $cond: {
                     if: {
                         $ne: [{ $arrayElemAt: ["$watchHistory", 0] }, new mongoose.Types.ObjectId(video[0]?._id)]
@@ -315,10 +316,11 @@ const getAVideobyId = asyncHandler( async (req, res) => {
               }
             },
             {
-              $set: { watchHistory: "$watchHistory" }
+              $set: { watchHistory: "$watchHistory1" }
             }
           ]
         )
+        console.log('here watchhistory');
         console.log(user);
     }
 
