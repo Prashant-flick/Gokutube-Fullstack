@@ -303,9 +303,8 @@ const getAVideobyId = asyncHandler( async (req, res) => {
                     {
                       $filter: {
                         input: "$watchHistory",
-                        as: "item",
                         cond: {
-                          $ne: ["$$item", new mongoose.Types.ObjectId(video[0]?._id)]
+                          $ne: ["$$this", new mongoose.Types.ObjectId(video[0]?._id)]
                         }
                       }
                     }
