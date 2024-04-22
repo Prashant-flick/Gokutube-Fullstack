@@ -288,19 +288,25 @@ const getAVideobyId = asyncHandler( async (req, res) => {
 
     if(isplaying || isplaying=='true'){
       console.log('isplaying', isplaying);
-      const user = await User.updateOne(
-        { _id: new mongoose.Types.ObjectId(req?.user?._id) },
-        {
-          $push: {
-            watchHistory: {
-              $each: [video[0]?._id],
-              $position: 0
+      const user = await User.findById(new mongoose.Types.ObjectId(req?.user?._id))
+      if(JSON.stringify(user?.watchHistory[0])!=JSON.stringify(video[0]?._id)){
+        user?.watchHistory = user?.watchHistory?.filter((id) => id!=new mongoose.Types.ObjectId(video[0]?._id))
+        user?.watchHistory.unshift(new mongoose.Types.ObjectId(video[0]?._id))
+
+        const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
+          {
+            $set: {
+              watchHistory: user?.watchHistory
             }
+          },
+          {
+            new: true
           }
-        }
-      );
+        )
+      }
+      
       console.log('here watchhistory');
-      console.log(user);
+      console.log(data);
     }
 
     return res.status(200)
