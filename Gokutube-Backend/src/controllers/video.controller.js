@@ -286,29 +286,30 @@ const getAVideobyId = asyncHandler( async (req, res) => {
         throw new apiError(404, "video not found")
     }
 
-    // if(isplaying || isplaying=='true'){
-    //   console.log('isplaying', isplaying);
-    //   const user = await User.findById(new mongoose.Types.ObjectId(req?.user?._id))
-    //   if(JSON.stringify(user?.watchHistory[0])!=JSON.stringify(video[0]?._id)){
-    //     user?.watchHistory = user?.watchHistory?.filter((id) => id!=new mongoose.Types.ObjectId(video[0]?._id))
-    //     user?.watchHistory.unshift(new mongoose.Types.ObjectId(video[0]?._id))
-    //     const watchHistory = user?.watchHistory
-    //     console.log(watchHistory);
+    if(isplaying || isplaying=='true'){
+      console.log('isplaying', isplaying);
+      const user = await User.findById(req?.user?._id)
+      console.log(user);
+      if(JSON.stringify(user?.watchHistory[0])!=JSON.stringify(video[0]?._id)){
+        user?.watchHistory = user?.watchHistory?.filter((id) => id!=new mongoose.Types.ObjectId(video[0]?._id))
+        user?.watchHistory.unshift(new mongoose.Types.ObjectId(video[0]?._id))
+        const watchHistory = user?.watchHistory
+        console.log(watchHistory);
 
-    //     const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
-    //       {
-    //         $set: {
-    //           watchHistory: watchHistory
-    //         }
-    //       },
-    //       {
-    //         new: true
-    //       }
-    //     )
-    //     console.log('here watchhistory');
-    //     console.log(data)
-    //   }
-    // }
+        // const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
+        //   {
+        //     $set: {
+        //       watchHistory: watchHistory
+        //     }
+        //   },
+        //   {
+        //     new: true
+        //   }
+        // )
+        console.log('here watchhistory');
+        console.log(data)
+      }
+    }
 
     return res.status(200)
     .json(
