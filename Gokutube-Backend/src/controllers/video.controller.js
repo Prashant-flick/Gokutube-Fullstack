@@ -291,21 +291,21 @@ const getAVideobyId = asyncHandler( async (req, res) => {
       const user = await User.findById(req?.user?._id)
       console.log(user);
       if(JSON.stringify(user?.watchHistory[0]) !== JSON.stringify(videoId)){
-        const watchhistory = user?.watchHistory
+        let watchhistory = user?.watchHistory
         watchhistory = watchhistory?.filter((id) => JSON.stringify(id) !== JSON.stringify(videoId))
         watchhistory = [videoId, ...watchhistory]
         console.log(watchhistory);
 
-        // const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
-        //   {
-        //     $set: {
-        //       watchHistory: watchHistory
-        //     }
-        //   },
-        //   {
-        //     new: true
-        //   }
-        // )
+        const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
+          {
+            $set: {
+              watchHistory: watchhistory
+            }
+          },
+          {
+            new: true
+          }
+        )
         console.log('here watchhistory');
       }
     }
