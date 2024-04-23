@@ -43,7 +43,7 @@ export const verifyJWT = asyncHandler(async (req, res , next) => {
         if(!token){
             console.log("req", req.cookies);
             const data = await refreshAccessToken(req.cookies?.refreshToken);
-            if(data.status === 401){
+            if(data?.status === 401){
                 throw new apiError(401, "unauthorized access");
             }
 
@@ -53,8 +53,8 @@ export const verifyJWT = asyncHandler(async (req, res , next) => {
                 sameSite: 'None',
             }
 
-            res.cookie("accessToken", data.accessToken, options)
-            .cookie("refreshToken", data.refreshToken, options)
+            res.cookie("accessToken", data?.accessToken, options)
+            .cookie("refreshToken", data?.refreshToken, options)
             
             token = data.accessToken;
         }
