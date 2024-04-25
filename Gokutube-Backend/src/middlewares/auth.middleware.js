@@ -46,10 +46,12 @@ export const verifyJWT = asyncHandler(async (req, res , next) => {
 
         // Get the current time
         const currentTime = Date.now();
+        console.log(currentTime);
+        console.log(expirationTime);
         
         console.log(token);
         if(!token || currentTime>=expirationTime){
-            console.log("req", req.cookies);
+            console.log("not token");
             const data = await refreshAccessToken(req.cookies?.refreshToken);
             if(data?.status === 401){
                 throw new apiError(401, "unauthorized access");
