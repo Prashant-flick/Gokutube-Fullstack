@@ -74,6 +74,8 @@ export const verifyJWT = asyncHandler(async (req, res , next) => {
         req.user = user;
         next();
     } catch (error) {
+        console.log('here error');
+        console.log(error?.message);
         throw new apiError(401,`jwt error:  ${error?.message} `|| "invalid access token")
     }
 });
