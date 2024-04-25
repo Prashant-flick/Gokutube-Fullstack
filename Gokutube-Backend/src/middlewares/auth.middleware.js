@@ -38,9 +38,17 @@ export const verifyJWT = asyncHandler(async (req, res , next) => {
     try {
         console.log(req.cookies);
         let token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
+        const decodeToken = jwt.decode(accessToken);
+
+        // Extract the expiration time from the decoded token
+        const expirationTime = decodeToken.exp * 1000; // Convert to milliseconds
+
+        // Get the current time
+        const currentTime = Date.now();
         
         console.log(token);
-        if(!token){
+        if(!token || currentTime>=expirationTime){
             console.log("req", req.cookies);
             const data = await refreshAccessToken(req.cookies?.refreshToken);
             if(data?.status === 401){
