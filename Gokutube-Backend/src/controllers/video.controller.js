@@ -286,14 +286,17 @@ const getAVideobyId = asyncHandler( async (req, res) => {
         throw new apiError(404, "video not found")
     }
 
-    if(isplaying || isplaying=='true'){
-      console.log('isplaying', isplaying);
+    console.log('isplaying', isplaying);
+    console.log(typeof(isplaying));
+    if(isplaying=='true'){
+      console.log('isplaying again', isplaying);
+      console.log(typeof(isplaying));
       const user = await User.findById(req?.user?._id)
       console.log(user);
       if(JSON.stringify(user?.watchHistory[0]) !== JSON.stringify(videoId)){
         let watchhistory = user?.watchHistory
         watchhistory = watchhistory?.filter((id) => JSON.stringify(id) !== JSON.stringify(videoId))
-        watchhistory = [videoId, ...watchhistory]
+        watchhistory = [new mongoose.Types.ObjectId(videoId), ...watchhistory]
         console.log(watchhistory);
 
         const data = await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req?.user?._id), 
