@@ -91,37 +91,19 @@ const getAllSubscriptionVideos = asyncHandler(async (req, res) => {
 })
 
 const publishAVideo = asyncHandler(async (req, res) => {
-    const {title , description} = req.body;
-    console.log(title, description);
+    const {title , description, videoFile, thumbnail} = req.body;
+    console.log(title, description, videoFile, thumbnail);
 
-    if(!title || !description){
-        throw new apiError(404, "title and description are required")
-    }
-
-    const videoFileLocalPath = req.files?.videoFile[0]?.path;
-    const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
-    console.log(req.files);
-    console.log(req.files.videoFile);
-    console.log(req.files.thumbnail);
-    console.log(req?.file);
-
-    if(!videoFileLocalPath || !thumbnailLocalPath){
-        throw new apiError(404, "video and thumbnail are required")
-    }
-
-    const videoFile = await uploadOnCloudinary(videoFileLocalPath);
-    const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
-
-    if(!videoFile || !thumbnail){
-        throw new apiError(404, "failed to upload on cloudinary")
+    if(!title || !description || !videoFile || !thumbnail){
+        throw new apiError(404, "all feilds are required")
     }
 
     const video = await Video.create(
         {
             title,
             description,
-            videoFile: videoFile.url,
-            thumbnail: thumbnail.url,
+            videoFile: videoFile,
+            thumbnail: thumbnail,
             owner: req.user._id
         },
     )
