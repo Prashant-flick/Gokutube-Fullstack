@@ -302,34 +302,34 @@ const updateAccountDetails = asyncHandler( async(req, res) => {
 })
 
 const updateAvatarDetails = asyncHandler( async(req, res) => {
-    const avatarLocalPath = req.file?.path;
-    console.log(req?.file);
-    console.log(req?.files);
+    const avatarUrl = req.body?.avatar;
+    console.log(req.body?.avatar);
+    console.log(req.user?.avatar);
 
-    if(!avatarLocalPath){
+    if(!avatarUrl){
         throw new apiError(400, "avatar file is missing");
-    }
-
-    const avatar = await uploadOnCloudinary(avatarLocalPath);
-
-    if(!avatar.url){
-        throw new apiError(500, 'server error while uploading image');
     }
 
     // getting cloudinary avatar file name
     let oldavatar = req.user?.avatar;
-    if(oldavatar && (String(oldavatar) != "https://res.cloudinary.com/dbmlz6pip/image/upload/v1713687287/u7cjyrdwu13cpnezw5ht.jpg")){
+    if(oldavatar){
         oldavatar = oldavatar.split('/');
-        oldavatar = oldavatar[7];
+        if(oldavatar[7]=='images'){
+            oldavatar = `images/${oldavatar[8]}`
+        }else{
+            oldavatar = oldavatar[7];
+        }
         oldavatar = oldavatar.split('.')[0]
-        deleteFromCloudinary(oldavatar);
+        console.log(oldavatar);
+
+        deleteFromCloudinary(oldavatar, "image");
     }
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set :{
-                avatar: avatar.url
+                avatar: avatarUrl
             }
         },
         {
@@ -349,36 +349,30 @@ const updateAvatarDetails = asyncHandler( async(req, res) => {
 })
 
 const updateCoverImageDetails = asyncHandler( async(req, res) => {
-    // if(!req.user){
-    //     throw new apiError(401, "user not logged in" );
-    // }
+    const coverImageUrl = req.body?.coverImage;
+    console.log(coverImageUrl);
 
-    const coverImageLocalPath = req.file?.path;
-    console.log(coverImageLocalPath);
-
-    if(!coverImageLocalPath){
-        throw new apiError(400, "coverImage file is missing");
-    }
-
-    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
-
-    if(!coverImage.url){
-        throw new apiError(500, 'server error while uploading image');
+    if(!coverImageUrl){
+        throw new apiError(400, "coverImageUrl is missing");
     }
 
     let oldcoverImage = req.user?.coverImage;
     if(oldcoverImage){
         oldcoverImage = oldcoverImage.split('/');
-        oldcoverImage = oldcoverImage[7];
+        if(oldcoverImage[7]=='images'){
+            oldcoverImage = `images/${oldcoverImage[8]}`
+        }else{
+            oldcoverImage = oldcoverImage[7];
+        }
         oldcoverImage = oldcoverImage.split('.')[0]
-        deleteFromCloudinary(oldcoverImage);
+        deleteFromCloudinary(oldcoverImage, "image");
     }
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set :{
-                coverImage: coverImage.url
+                coverImage: coverImageUrl
             }
         },
         {

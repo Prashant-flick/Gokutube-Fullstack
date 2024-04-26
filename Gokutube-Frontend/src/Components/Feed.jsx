@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FeedVideo } from './index.js'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { setplaylist } from '../store/playlistSlice.js';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../api/axios.js'
 
 function Feed() {
@@ -15,6 +15,7 @@ function Feed() {
   const [length, setlength] = useState(0)
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.authReducer.userData)
+  const navigate = useNavigate()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search);
@@ -23,7 +24,7 @@ function Feed() {
 
   useEffect(() => {
     
-    if(subscription){
+    if(status && subscription){
       ;(async() => {
         const subscriptionData = await axios.get(`/api/v1/subscription/get-subscribed-to/${currentUser?._id}`)
         const data = await axios.post(`/api/v1/videos/get-all-subscription-videos`, {
@@ -32,21 +33,20 @@ function Feed() {
         setvideos(prev => prev=data.data.data.videos);
         setlength(prev => prev=data.data.data.length);
       })()
-    }else if(status){
-      ;(async() => {
-        const data = await FetchAllVidoes({limit:limit+6, query:(search==null ? "" : search)});
-        setvideos(prev => prev=data.videos);
-        setlength(prev => prev=data.length)
-        // dispatch(setdata(data))
-      })()
     }
+    ;(async() => {
+      const data = await FetchAllVidoes({limit:limit+6, query:(search==null ? "" : search)});
+      setvideos(prev => prev=data.videos);
+      setlength(prev => prev=data.length)
+      // dispatch(setdata(data))
+    })()
 
 
     if(status){
-      ;(async() => {
-        const data = await FetchUserPlaylist(currentUser?._id)
-        dispatch(setplaylist(data))
-      })()
+        ;(async() => {
+          const data = await FetchUserPlaylist(currentUser?._id)
+          dispatch(setplaylist(data))
+        })()
     }
   },[])
 

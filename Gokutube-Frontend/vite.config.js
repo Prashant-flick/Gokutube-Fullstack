@@ -29,7 +29,7 @@ export default ({ mode }) => {
               target: String(process.env.VITE_API_URL),
               changeOrigin: true,
               secure: false,      
-          }
+          },
         }
       },
       plugins: [react()],

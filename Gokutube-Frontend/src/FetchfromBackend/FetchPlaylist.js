@@ -6,7 +6,7 @@ const FetchUserPlaylist = async(id) => {
     
         return playlist.data.data
     } catch (error){
-        console.log(error);
+        return error
     }
 }
 

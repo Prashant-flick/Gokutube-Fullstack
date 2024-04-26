@@ -4,12 +4,12 @@ import {
   Header,
   SideBar
 } from './Components/index.js'
-import { useDispatch } from 'react-redux'
-import {logout as authLogout} from './store/authSlice.js'
+// import { useDispatch } from 'react-redux'
+// import {logout as authLogout} from './store/authSlice.js'
 import { useLocation } from 'react-router-dom'
 
 function App() {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [loader , setloader] = useState(true)
   const location = useLocation()
   const title = location.pathname.split('/')[1]  

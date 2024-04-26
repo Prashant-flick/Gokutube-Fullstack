@@ -4,14 +4,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate} from 'react-router-dom';
 import { useParams, useLocation } from 'react-router-dom'
 import { getUserChannelProfile } from '../FetchfromBackend/FetchUser.js'
-import { login as authlogin} from '../store/authSlice.js'
 import axios from '../api/axios.js'
+import {ThreeDots} from 'react-loader-spinner'
 
 function ChannelPage() { 
   const {username} = useParams()
   const [user, setUser] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  
+  //image and video upload on cloudinary
+  const [avatar, setavatar] = useState(null)
+  const [coverImage, setcoverImage] = useState(null)
+  const [fullName, setfullName] = useState(null)
+  const [loading, setloading] = useState(false)
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -45,64 +51,85 @@ function ChannelPage() {
     }
   }
 
-  const customizeChannel = async (e) => {
-    const {fname, avatar, coverImage} = e.target
-    console.log(fname.value, avatar.value, coverImage.value);
-    
-    let newuser=null;
-    let flag1=true;
-    let flag2=true;
-    let flag3=true;
-    if(avatar.value){
-      const formData = new FormData();
-      formData.append('avatar', avatar.files[0])
-      const data = await axios.patch(`/api/v1/users/update-avatar`, formData,
-        {
-          headers: {'Content-Type': 'multipart/form-data'}
-        }
-      )
-      console.log(data);
-      if(data.status !== 200){
-        flag1=false;
-      }else{
-        newuser=data.data.data
-      }
-    }
 
-    if(coverImage?.value){
-      const formData = new FormData();
-      formData.append('coverImage', coverImage.files[0])
-      const data = await axios.patch(`/api/v1/users/update-coverImage`, formData,
-      {
-        headers: {'Content-Type': 'multipart/form-data'}
-      }
-    )
-      console.log(data);
-      if(data.status !== 200){
-        flag2=false;
-      }else{
-        newuser=data.data.data
-      }
-    }
+  const uploadFile = async (type) => {
+    const data = new FormData()
+    data.append("file", type === 'avatar' ? avatar : coverImage)
+    data.append("upload_preset", "images_preset")
 
-    if(fname?.value){
-      const data = await axios.patch(`/api/v1/users/update-account`, {
-        fullName: fname.value
+    try {
+      let cloudname = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      let resourceType = 'auto'
+      let url = `https://api.cloudinary.com/v1_1/${cloudname}/${resourceType}/upload`
+
+      let secure_url = ''
+      await fetch(url, {
+        method: "POST",
+        body: data
       })
-      console.log(data);
-      if(data.status !== 200){
-        flag3=false;
-      }else{
-        newuser=data.data.data
-      }
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          secure_url = data.secure_url
+        })
+      return secure_url
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    if(flag1 && flag2 && flag3){
-      if(newuser){
-        dispatch(authlogin(newuser))
+  const customizeChannel = async (e) => {
+    
+    try {
+      setloading(true)
+      let flag1 = true
+      let flag2 = true
+      let flag3 = true
+
+      if(avatar){
+        const url = await uploadFile('avatar')
+        console.log(url);
+        if(url){
+          const data = await axios.patch(`/api/v1/users/update-avatar`, {avatar: url})
+          if(data.status !== 200){
+            flag1 = false
+          }
+        }
       }
-      window.location.reload()
+
+      if(coverImage){
+        const url = await uploadFile('coverImage')
+        if(url){
+          const data = await axios.patch(`/api/v1/users/update-coverImage`, {coverImage: url})
+          if(data.status !== 200){
+            flag2 = false
+          }
+        }
+      }
+
+      if(fullName){
+        const data = await axios.patch(`/api/v1/users/update-account`, {fullName})
+        if(data.status !== 200){
+          flag3 = false
+        }
+      }
+
+      if(flag1 && flag2 && flag3){
+        setavatar(null)
+        setcoverImage(null)
+        setfullName(null)
+
+        console.log('file uploaded successfully');
+        setloading(false)
+        window.location.reload()
+      }
+
+      
+    } catch (error) {
+      console.error(error);
     }
+    
   }
 
   return (
@@ -161,12 +188,38 @@ function ChannelPage() {
                           className='flex justify-center h-full w-full flex-col gap-1'
                         >
                           <label className='text-gray-400'>fullname</label>
-                          <input name='fname' className='w-56 outline-none bg-gray-200 pl-1 rounded-sm' type="text" />
+                          <input 
+                            className='w-56 outline-none bg-gray-200 pl-1 rounded-sm' 
+                            type="text" 
+                            value={fullName}
+                            onChange={(e) => setfullName((prev) => e.target.value)}  
+                          />
                           <label className='text-gray-400'>avatar</label>
-                          <input name='avatar' className='mb-2' type="file" />
+                          <input 
+                            className='mb-2'
+                            type="file" 
+                            accept='image/'
+                            onChange={(e) => setavatar((prev) => e.target.files[0])}
+                          />
                           <label className='text-gray-400'>coverImage</label>
-                          <input name='coverImage' type="file" />
+                          <input 
+                            type="file" 
+                            accept='image/'
+                            onChange={(e) => setcoverImage((prev) => e.target.files[0])}
+                          />
                           <Button type='submit' label='Submit' />
+                          { loading &&
+                          <ThreeDots
+                            visible={true}
+                            height="80"
+                            width="80"
+                            color="#4fa94d"
+                            radius="9"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                          />
+                          }
                         </form>
                     </div>
                   </div>

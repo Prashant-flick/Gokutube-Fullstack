@@ -34,8 +34,12 @@ function SideBar() {
 
     if(authstatus){
       ;(async() => {
-        const data = await axios.get(`/api/v1/subscription/get-subscribed-to/${user?._id}?limit=${limit}`)
-        setsubscribed(data.data.data)
+        try {
+          const data = await axios.get(`/api/v1/subscription/get-subscribed-to/${user?._id}?limit=${limit}`)
+          setsubscribed(data.data.data)
+        } catch (error) {
+          console.log(error);
+        }
       })()
     }
   },[user])

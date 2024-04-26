@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import axios  from '../api/axios.js'
 import { useNavigate } from 'react-router-dom'
+import {logout as authLogout} from '../store/authSlice.js'
 
 function Header() {
   const status = useSelector(state => state.authReducer.status)
@@ -17,6 +18,22 @@ function Header() {
     e.preventDefault()
     setShow((prev)=>!prev)
   }
+
+  useEffect(() => {
+    if(status){
+      (async() => {
+        try {
+          const data = await axios.get(`/api/v1/users/get-current-user`)
+        } catch (error) {
+          if(error.request.status === 401){
+            window.localStorage.clear()
+            dispatch(authLogout())
+            navigate('/login')
+          }
+        }
+      })()
+    }
+  },[])
 
   const logout = async(e) => {
     e.preventDefault()
