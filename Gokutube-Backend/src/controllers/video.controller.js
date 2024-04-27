@@ -133,28 +133,32 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     const video = await Video.findByIdAndDelete(videoId)
-    console.log(video);
 
     if(!video){
         throw new apiError(404, "video not found")
     }
 
     let oldthumbnail = video?.thumbnail;
+    console.log(oldthumbnail);
     if(oldthumbnail[7]==='images'){
-        oldthumbnail = `images/${oldcoverImage[8]}`
+        oldthumbnail = `images/${oldthumbnail[8]}`
+        console.log(oldthumbnail);
     }else{
         oldthumbnail = oldthumbnail[7];
     }
     oldthumbnail = oldthumbnail.split('.')[0]
 
     let oldvideo = video?.videoFile;
+    console.log(oldvideo);
     if(oldvideo[7]==='videos'){
         oldvideo = `videos/${oldvideo[8]}`
+        console.log(oldvideo);
     }else{
         oldvideo = oldvideo[7];
     }
     oldvideo = oldvideo.split('.')[0];
 
+    console.log(oldthumbnail, oldvideo);
     deleteFromCloudinary(oldthumbnail, "image");
     deleteFromCloudinary(oldvideo, "video");
 
