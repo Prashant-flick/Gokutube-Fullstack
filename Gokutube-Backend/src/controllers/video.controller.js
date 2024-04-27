@@ -139,6 +139,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     let oldthumbnail = video?.thumbnail;
+    oldthumbnail = oldthumbnail.split('/')
     console.log(oldthumbnail);
     if(oldthumbnail[7]==='images'){
         oldthumbnail = `images/${oldthumbnail[8]}`
@@ -149,6 +150,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     oldthumbnail = oldthumbnail.split('.')[0]
 
     let oldvideo = video?.videoFile;
+    oldvideo = oldvideo.split('/')
     console.log(oldvideo);
     if(oldvideo[7]==='videos'){
         oldvideo = `videos/${oldvideo[8]}`
