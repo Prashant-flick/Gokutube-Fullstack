@@ -33,7 +33,6 @@ const deleteFromCloudinary = async(fileName, resource_type) => {
             throw new apiError(404, "file not found")
         }
 
-        console.log('cloudinary', fileName, resource_type);
         const response = await cloudinary.uploader.destroy(fileName, {resource_type})
         return response
     } catch (error) {

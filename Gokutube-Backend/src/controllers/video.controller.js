@@ -126,7 +126,6 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const {videoId} = req.params;
-    console.log(videoId);
 
     if(!videoId){
         throw new apiError(400, 'video id is required')
@@ -139,11 +138,9 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     let oldthumbnail = video?.thumbnail;
-    oldthumbnail = oldthumbnail.split('/')
     console.log(oldthumbnail);
     if(oldthumbnail[7]==='images'){
         oldthumbnail = `images/${oldthumbnail[8]}`
-        console.log(oldthumbnail);
     }else{
         oldthumbnail = oldthumbnail[7];
     }
@@ -151,16 +148,13 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
     let oldvideo = video?.videoFile;
     oldvideo = oldvideo.split('/')
-    console.log(oldvideo);
     if(oldvideo[7]==='videos'){
         oldvideo = `videos/${oldvideo[8]}`
-        console.log(oldvideo);
     }else{
         oldvideo = oldvideo[7];
     }
     oldvideo = oldvideo.split('.')[0];
 
-    console.log(oldthumbnail, oldvideo);
     deleteFromCloudinary(oldthumbnail, "image");
     deleteFromCloudinary(oldvideo, "video");
 
