@@ -5,6 +5,7 @@ import { Input, Button, MyvideosFeed } from '../index.js'
 import { setdata as setvideodata, adddata as addvideodata} from '../../store/videoSlice.js'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from '../../api/axios.js'
+import { ThreeDots } from 'react-loader-spinner'
 
 function MyVideos() {
   const videodata = useSelector(state => state.videoReducer.videoData)
@@ -15,12 +16,18 @@ function MyVideos() {
   const [length, setlength] = useState(0)
   const currentUser  = useSelector(state => state.authReducer.userData)
 
+  //form data
+  const [title, settitle] = useState('')
+  const [description, setdescription] = useState('')
+  const [videoFile, setvideoFile] = useState(null)
+  const [thumbnail, setthumbnail] = useState(null)
+  const [loading, setloading] = useState(false)
+
   useEffect(() => {
     if(id){
       ;(async () => {
         const data = await fetchUserVideo(id)
         if(data){
-          // setVideos(data.videos)
           setlength(data.length)
           dispatch(setvideodata(data))
         }
@@ -32,39 +39,73 @@ function MyVideos() {
 
   },[])
 
-  //Upload Video
-  const uploadVideo = async(e) => {
-    e.preventDefault()
-    const { Title, Description, VideoFile, Thumbnail } = e.target;
-    const form = new FormData(); 
+   //Upload Video
+   const uploadFile = async (type) => {
+    const data = new FormData()
+    data.append("file", type === 'video' ? videoFile : thumbnail)
+    data.append("upload_preset", type === 'video' ? "videos_preset" : "images_preset")
 
-    //appending files
-    form.append('videoFile', VideoFile.files[0]);
-    form.append('thumbnail', Thumbnail.files[0]);
+    try {
+      let cloudname = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      let resourceType = type==='video' ? 'video' : 'image'
+      let url = `https://api.cloudinary.com/v1_1/${cloudname}/${resourceType}/upload`
 
-    //appending other data
-    form.append('title', Title.value);
-    form.append('description', Description.value);
+      let secure_url = ''
+      await fetch(url, {
+        method: "POST",
+        body: data
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          secure_url = data?.secure_url
+        })
+      return secure_url
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-    setShowUploadSection(prev=> prev=false)
+  const uploadVideo = async (e) => {
     
     try {
-      const data = await axios.post('/api/v1/videos/publish-video', form,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+      setloading(true)
+      let flag1 = false
+
+      if(thumbnail && videoFile && title && description){
+        const url1 = await uploadFile('thumbnail')
+        const url2 = await uploadFile('video')
+
+        if(url1 && url2){
+          const data = await axios.post(`/api/v1/videos/publish-video`, {
+            title,
+            description,
+            thumbnail: url1,
+            videoFile: url2
+          })
+          if(data?.status === 200){
+            flag1 = true
           }
         }
-      )
-      console.log(data);
+      }
 
-      dispatch(addvideodata(data.data.data))
+      if(flag1){
+        settitle(null)
+        setdescription(null)
+        setthumbnail(null)
+        setvideoFile(null)
+
+        console.log('file uploaded successfully');
+        setloading(false)
+        window.location.reload()
+      }
+
       
     } catch (error) {
-      console.log(error);
-      setShowUploadSection(prev=> prev=false)
-      console.error('error while uploading video');
+      console.error(error);
     }
+    
   }
 
   return (
@@ -72,26 +113,82 @@ function MyVideos() {
       <div className='flex justify-center mb-4'>
         {
           showUploadSection ? 
-          <div onClick={(e)=>setShowUploadSection(prev=> prev=!prev)} className='top-0 z-20 left-0 flex items-center justify-center bg-white bg-opacity-20 fixed w-full h-full'>
-            <form 
-              onSubmit={(e)=>uploadVideo(e)} 
-              className='bg-gray-500 flex flex-col relative z-20 rounded-3xl pt-4 items-center gap-2 w-[25%] h-[55%] '
-              onClick={(e) => e.stopPropagation()}  
+          <div onClick={(e)=> {
+              e.preventDefault()
+              setShowUploadSection(prev=> prev=!prev)
+            }} 
+            className='top-0 z-20 left-0 flex items-center justify-center bg-white bg-opacity-20 fixed h-[100vh] w-[100vw]'
+          >
+            <div
+              onClick={(e) => {
+                // e.preventDefault()
+                e.stopPropagation()
+              }}
+              className='flex items-center gap-5 px-5 py-2 bg-gray-700 h-auto rounded-xl w-[25rem]'
             >
-              <h1 className='text-3xl font-bold mb-1'>Input</h1>
-              <Input className="w-[70%]" label='Title' name='Title' type='text' />
-              <Input className="w-[70%]" label='Description' name='Description' type='text' />
-              <Input label='VideoFile' name='VideoFile' type='file' />
-              <Input label='Thumbnail' name='Thumbnail' type='file' />
-              <Button label='Upload'/>
-            </form>
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  uploadVideo(e)
+                }}
+                className='flex justify-center h-full w-full flex-col gap-1 items-center' 
+              >
+                <h1 className='text-3xl font-bold mb-1'>Input</h1>
+                <label className='text-gray-400'>title</label>
+                <input 
+                  className='w-56 outline-none bg-gray-200 pl-1 rounded-sm' 
+                  type="text" 
+                  value={title}
+                  onChange={(e) => settitle((prev) => e.target.value)}  
+                />
+                <label className='text-gray-400'>description</label>
+                <input 
+                  className='w-56 outline-none bg-gray-200 pl-1 rounded-sm' 
+                  type="text" 
+                  value={description}
+                  onChange={(e) => setdescription((prev) => e.target.value)}  
+                />
+                <label className='text-gray-400'>Video</label>
+                <input 
+                  className='mb-2'
+                  type="file" 
+                  accept='video/'
+                  onChange={(e) => setvideoFile((prev) => e.target.files[0])}
+                />
+                <label className='text-gray-400'>Thumbnail</label>
+                <input 
+                  type="file" 
+                  accept='image/'
+                  onChange={(e) => setthumbnail((prev) => e.target.files[0])}
+                />
+                <Button type='submit' label='Upload' />
+                { loading &&
+                  <ThreeDots
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#4fa94d"
+                    radius="9"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                }
+              </form>
+            </div>
           </div>
           :
           <></>
         }
         {
           currentUser?._id === id &&
-            <Button onClick={(e)=>setShowUploadSection(prev=> prev=!prev)} label='Upload Video' classname='ml-3 mb-0 mt-1 rounded-3xl'/>
+            <Button 
+              onClick={(e)=>{
+                e.preventDefault()
+                setShowUploadSection(prev=> prev=!prev)
+              }}
+              label='Upload Video' classname='ml-3 mb-0 mt-1 rounded-3xl'
+            />
         }
       </div>
     {

@@ -16,7 +16,7 @@ function ChannelPage() {
   //image and video upload on cloudinary
   const [avatar, setavatar] = useState(null)
   const [coverImage, setcoverImage] = useState(null)
-  const [fullName, setfullName] = useState(null)
+  const [fullName, setfullName] = useState('')
   const [loading, setloading] = useState(false)
 
   const location = useLocation();

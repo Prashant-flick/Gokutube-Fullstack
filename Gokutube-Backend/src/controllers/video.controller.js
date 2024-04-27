@@ -140,11 +140,19 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     let oldthumbnail = video?.thumbnail;
-    oldthumbnail = oldthumbnail.split('/')[7];
+    if(oldthumbnail[7]==='images'){
+        oldthumbnail = `images/${oldcoverImage[8]}`
+    }else{
+        oldthumbnail = oldthumbnail[7];
+    }
     oldthumbnail = oldthumbnail.split('.')[0]
 
     let oldvideo = video?.videoFile;
-    oldvideo = oldvideo.split('/')[7];
+    if(oldvideo[7]==='videos'){
+        oldvideo = `videos/${oldvideo[8]}`
+    }else{
+        oldvideo = oldvideo[7];
+    }
     oldvideo = oldvideo.split('.')[0];
 
     deleteFromCloudinary(oldthumbnail, "image");

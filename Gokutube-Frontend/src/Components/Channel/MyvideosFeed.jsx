@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deletedata as deletevideo } from '../../store/videoSlice.js';
 
 function MyvideosFeed({
-    video=null
+    video=nulll
 }) {
   const [showVideo, setShowVideo] = useState(false)
   const [showvideosettingicon, setshowvideosettingicon] = useState(false)
@@ -97,7 +97,7 @@ function MyvideosFeed({
         <div 
           className='ml-3 gap-2 flex flex-row mb-3 items-center relative'
           onMouseLeave={()=> {
-            setShowVideoOptions(false)
+            // setShowVideoOptions(false)
           }}
           onClick={(e) => {
             e.preventDefault()
