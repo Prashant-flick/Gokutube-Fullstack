@@ -22,6 +22,8 @@ function MyVideos() {
   const [videoFile, setvideoFile] = useState(null)
   const [thumbnail, setthumbnail] = useState(null)
   const [loading, setloading] = useState(false)
+  const [largevideoFile, setlargevideoFile] = useState(false)
+  const [largeimgFile, setlargeimgFile] = useState(false)
 
   useEffect(() => {
     if(id){
@@ -72,6 +74,17 @@ function MyVideos() {
     try {
       setloading(true)
       let flag1 = false
+      if(videoFile.size > 20000 || thumbnail.size > 5000){
+        setloading(false)
+        if(videoFile.size > 20000 && thumbnail.size > 5000){
+          alert('video(max 40MB) and thumbnail(max 5mb) too large ')
+        }else if(videoFile.size > 20000){
+          alert('video(max 40MB) too large ')
+        }else{
+          alert('thumbnail(max 5mb) too large ')
+        }
+        return
+      }
 
       if(thumbnail && videoFile && title && description){
         const url1 = await uploadFile('thumbnail')
