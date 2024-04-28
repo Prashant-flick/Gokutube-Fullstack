@@ -138,7 +138,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     let oldthumbnail = video?.thumbnail;
-    console.log(oldthumbnail);
+    oldthumbnail = oldthumbnail.split('/')
     if(oldthumbnail[7]==='images'){
         oldthumbnail = `images/${oldthumbnail[8]}`
     }else{
